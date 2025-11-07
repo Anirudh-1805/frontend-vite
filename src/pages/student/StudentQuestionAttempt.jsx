@@ -37,7 +37,7 @@ function StudentQuestionAttempt() {
   const fetchQuestionData = async () => {
     try {
       setLoading(true)
-      const response = await API.get(`https://leisa-hiplike-willodean.ngrok-free.dev/api/student/class/${classId}/${questionId}`)
+      const response = await API.get(`/api/student/class/${classId}/${questionId}`)
       setQuestionData(response.data)
     } catch (error) {
       console.error('Error fetching question data:', error)
@@ -65,7 +65,7 @@ function StudentQuestionAttempt() {
         formData.append('old_filename', oldFilename);
       }
 
-      const response = await API.post(`https://leisa-hiplike-willodean.ngrok-free.dev/api/student/run/${questionId}`, formData, {
+      const response = await API.post(`/api/student/run/${questionId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -100,14 +100,14 @@ function StudentQuestionAttempt() {
         formData.append('old_filename', oldFilename);
       }
 
-      await API.post(`https://leisa-hiplike-willodean.ngrok-free.dev/api/student/submission/${questionId}`, formData, {
+      await API.post(`/api/student/submission/${questionId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
 
       toast.success('Submission successful!')
-      navigate(`https://leisa-hiplike-willodean.ngrok-free.dev/student/class/${classId}`)
+      navigate(`api/student/class/${classId}`)
       setPrevLanguage(language);
     } catch (error) {
       console.error('Error submitting:', error)

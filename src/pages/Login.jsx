@@ -68,7 +68,7 @@ function Login() {
 
 
       // 6. Call YOUR backend with the Cognito token (this line is modified)
-      const response = await API.post('https://leisa-hiplike-willodean.ngrok-free.dev/api/login', {
+      const response = await API.post('/api/login', {
         token: cognitoIdToken, // Send the token, not email/pass
       })
 

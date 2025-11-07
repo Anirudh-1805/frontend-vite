@@ -16,7 +16,7 @@ function StudentClassView() {
   const fetchQuestions = async () => {
     try {
       setLoading(true)
-      const response = await API.get(`https://leisa-hiplike-willodean.ngrok-free.dev/api/student/class/${classId}`)
+      const response = await API.get(`/api/student/class/${classId}`)
       setQuestions(response.data.questions || [])
     } catch (error) {
       console.error('Error fetching questions:', error)
