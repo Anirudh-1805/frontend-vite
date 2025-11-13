@@ -143,7 +143,7 @@ function StudentQuestionAttempt() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => navigate(`https://leisa-hiplike-willodean.ngrok-free.dev/student/class/${classId}`)}
+              onClick={() => navigate(`/student/class/${classId}`)}
               className="text-gray-600 hover:text-gray-900"
             >
               ← Back
@@ -290,9 +290,53 @@ function StudentQuestionAttempt() {
                             ? 'text-green-600'
                             : 'text-gray-600'
                         }`}>
-                          {questionData.Submission.Score !== null && questionData.Submission.Score !== undefined
-                            ? `${questionData.Submission.Score}%`
-                            : 'N/A'}
+                          {(() => {
+                            const scoreArr = Array.isArray(questionData.Submission.Score?.results)
+                              ? questionData.Submission.Score.results
+                              : Array.isArray(questionData.Submission.Score)
+                                ? questionData.Submission.Score
+                                : null;
+                            if (scoreArr) {
+                              return (
+                                <div className="overflow-x-auto">
+                                  <table className="min-w-full text-sm border border-gray-200 rounded">
+                                    <thead>
+                                      <tr className="bg-gray-100">
+                                        <th className="px-2 py-1 border">Test Case</th>
+                                        <th className="px-2 py-1 border">Input</th>
+                                        <th className="px-2 py-1 border">Expected</th>
+                                        <th className="px-2 py-1 border">Actual</th>
+                                        <th className="px-2 py-1 border">Status</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {scoreArr.map((res, idx) => (
+                                        <tr key={idx}>
+                                          <td className="px-2 py-1 border text-center">{res.test_case || idx + 1}</td>
+                                          <td className="px-2 py-1 border">{String(res.input)}</td>
+                                          <td className="px-2 py-1 border">{String(res.expected)}</td>
+                                          <td className="px-2 py-1 border">{String(res.actual)}</td>
+                                          <td className={`px-2 py-1 border text-center font-semibold ${
+                                            res.status === 'Passed' ? 'text-green-600' :
+                                            res.status === 'Failed' ? 'text-yellow-600' :
+                                            'text-red-600'
+                                          }`}>
+                                            {res.status}
+                                          </td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              );
+                            } else if (typeof questionData.Submission.Score === 'object' && questionData.Submission.Score !== null) {
+                              return <span className="text-xs text-gray-500">{JSON.stringify(questionData.Submission.Score)}</span>;
+                            } else {
+                              return questionData.Submission.Score !== null && questionData.Submission.Score !== undefined
+                                ? questionData.Submission.Score
+                                : 'N/A';
+                            }
+                          })()}
                         </span>
                       </div>
                     </div>
